@@ -66,54 +66,41 @@ function mineStock(papel) {
   }
 }
 
-//Extraindo pela fundamentos
+//Extraindo pela fundamentos - nova solução usando cheerios
 function extrairConteudoTabela(html) {
-  // Expressão regular para encontrar todas as tabelas no HTML
-  const regex = /<table[^>]*>[\s\S]*?<\/table>/gi;
-  const tabelas = html.match(regex);
-  Logger.log(tabelas);
-  //Logger.log(tabelas);
-  var contador = 0;
+  // Carrega a biblioteca Cheerio
+  eval(UrlFetchApp.fetch('https://gmc-eduardo.github.io/FundamentusFII/').getContentText());
 
-  if (tabelas) {
-    // Iterar sobre cada tabela encontrada
-    tabelas.forEach(function (tabelaHTML) {
-      // Analisar a tabela HTML usando DOMParser
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(tabelaHTML, 'text/html');
+  // Carrega o HTML usando Cheerio
+  var $ = Cheerio.load(html);
+  
+  // Encontra todas as tabelas no HTML
+  $('table').each(function(i, tabela){
+    
+    
 
-      // Obter o elemento raiz do documento
-      var root = doc.documentElement;
+    // Cria uma nova planilha para cada tabela
+    var planilha = SpreadsheetApp.getActiveSpreadsheet();
 
-      Logger.log("logging root:"+root);
-      
-      if (contador >= 3) {
-        return; // Sai da função se o limite for atingido
-      }
-      contador++;
-      // Criar uma nova planilha para cada tabela
-      var planilha = SpreadsheetApp.getActiveSpreadsheet()
+    // Itera sobre as linhas da tabela
+    $(tabela).find('tr').each(function(j, linha){
+      var novaLinha = [];
 
-      // Iterar sobre as linhas da tabela
-      var linhas = root.getChildren('tr');
-      linhas.forEach(function (linha) {
-        // Criar uma nova linha na planilha
-        var novaLinha = [];
-        // Iterar sobre as células da linha
-        var celulas = linha.getChildren('td');
-        celulas.forEach(function (celula) {
-          // Adicionar o conteúdo da célula à nova linha
-          Logger.log(celula.getText())
-          novaLinha.push(celula.getText());
-        });
-        // Adicionar a nova linha à planilha
-        planilha.appendRow(novaLinha);
+      // Itera sobre as células da linha
+      $(linha).find('td').each(function(k, celula){
+        // Adiciona o conteúdo da célula à nova linha
+        //novaLinha.push($(celula).text());
+        // Limita a execução para 3 linhas
+        Logger.log($(celula).text());
+        if (i >= 3) return false;
       });
+
+      // Adiciona a nova linha à planilha
+      planilha.appendRow(novaLinha);
     });
-  } else {
-    Logger.log("Nenhuma tabela encontrada no HTML.");
-  }
+  });
 }
+
 
 function exibirTabelas() {
 
