@@ -1,0 +1,14 @@
+# ignorar o arquivo TODO apenas no diretório atual
+/TODO
+
+# ignorar todos os arquivos no diretório build/
+build/
+
+# ignorar doc/ txt
+doc/*.txt
+
+# ignorar todos os arquivos .pdf no diretório doc/
+doc/**/*.pdf
+
+# ignorar clasp.json
+.clasp.json

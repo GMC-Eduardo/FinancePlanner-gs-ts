@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Righteous" />
+    <style>
+    
+h1 {
+  color: #eeba2b;
+}
+
+span {
+  color: white;
+  font-family: 'Righteous'
+}
+.alert-success{
+  background-color:#2a392e;
+  color:white;
+}
+input, label, h1{
+   font-family: 'Helvetica';
+  font-weight: bold;
+}
+</style>
+  </head>
+  
+  <body>
+    <div class="alert alert-success">
+      <h1 class="display-4"><span>C</span>adastro de Ações</h1>
+      <form id="CStocksForm" onsubmit="enviarFormulario(); return false;" >
+        
+        <!--<label for="nome">Nome:</label><br>
+        <input type="text" id="nome" name="nome" required><br>-->
+
+        
+        <label for="preco">Preço:</label><br>
+        <input type="number" id="preco" name="preco" required><br>
+        <label for="qtd">Quantidade:</label><br>
+        <input type="number" id="qtd" name="qtd" required><br>
+        <label for="data">Data:</label><br>
+        <input type="text" id="data" name="data" class="datepicker" required><br>
+        <label for="acaoSelecionada">Ticker:</label><br>
+        <select id="acaoSelecionada" name="acaoSelecionada" class="form-control" required>
+          <!-- Adiciona automaticamente as opções da lista de ações fornecida -->
+          <!-- Script para preencher o select com a lista -->
+          <script>
+            var listaAcoes = [
+              "Escolha uma ação","AALR3", "ABCB4", "ABEV3", "ADHM3", "AERI3", "AESB3", "AFLT3", "AGRO3", "AGXY3", "AHEB3", "AHEB5", "ALLD3", "ALOS3", "ALPA3", "ALPA4", "ALPK3", "ALUP11", "ALUP3", "ALUP4", "AMAR3", "AMBP3", "AMER3", "ANIM3", "APER3", "ARML3", "ARZZ3", "ASAI3", "ATMP3", "ATOM3", "AURA33", "AURE3", "AVLL3", "AZEV3", "AZEV4", "AZUL4", "B3SA3", "BAHI3", "BALM3", "BALM4", "BAUH4", "BAZA3", "BBAS3", "BBDC3", "BBDC4", "BBSE3", "BDLL3", "BDLL4", "BEEF3", "BEES3", "BEES4", "BGIP3", "BGIP4", "BHIA3", "BIOM3", "BLAU3", "BLUT3", "BLUT4", "BMEB3", "BMEB4", "BMGB4", "BMIN3", "BMIN4", "BMKS3", "BMOB3", "BNBR3", "BOBR4", "BPAC11", "BPAC3", "BPAC5", "BPAN4", "BRAP3", "BRAP4", "BRBI11", "BRFS3", "BRGE11", "BRGE12", "BRGE3", "BRGE5", "BRGE6", "BRGE7", "BRGE8", "BRIT3", "BRIV3", "BRIV4", "BRKM3", "BRKM5", "BRKM6", "BRSR3", "BRSR5", "BRSR6", "BSLI3", "BSLI4", "CALI3", "CAMB3", "CAML3", "CASH3", "CBAV3", "CBEE3", "CCRO3", "CEAB3", "CEBR3", "CEBR5", "CEBR6", "CEDO3", "CEDO4", "CEEB3", "CEEB5", "CEED3", "CEED4", "CEGR3", "CGAS3", "CGAS5", "CGRA3", "CGRA4", "CIEL3", "CLSA3", "CLSC3", "CLSC4", "CMIG3", "CMIG4", "CMIN3", "COCE3", "COCE5", "COGN3", "CPFE3", "CPLE3", "CPLE5", "CPLE6", "CRFB3", "CRIV3", "CRIV4", "CRPG3", "CRPG5", "CRPG6", "CSAB3", "CSAN3", "CSED3", "CSMG3", "CSNA3", "CSRN3", "CSRN5", "CSRN6", "CSUD3", "CTKA3", "CTKA4", "CTNM3", "CTNM4", "CTSA3", "CTSA4", "CURY3", "CVCB3", "CXSE3", "CYRE3", "DASA3", "DESK3", "DEXP3", "DEXP4", "DIRR3", "DMFN3", "DMVF3", "DOHL3", "DOHL4", "DOTZ3", "DTCY3", "DXCO3", "EALT3", "EALT4", "ECOR3", "EGIE3", "EKTR3", "EKTR4", "ELET3", "ELET5", "ELET6", "ELMD3", "EMAE4", "EMBR3", "ENAT3", "ENEV3", "ENGI11", "ENGI3", "ENGI4", "ENJU3", "ENMT3", "ENMT4", "EPAR3", "EQMA3B", "EQPA3", "EQPA5", "EQPA6", "EQPA7", "EQTL3", "ESPA3", "ESTR3", "ESTR4", "ETER3", "EUCA3", "EUCA4", "EVEN3", "EZTC3", "FESA3", "FESA4", "FHER3", "FIEI3", "FIQE3", "FLRY3", "FRAS3", "FRIO3", "FRTA3", "GEPA3", "GEPA4", "GFSA3", "GGBR3", "GGBR4", "GGPS3", "GMAT3", "GOAU3", "GOAU4", "GOLL4", "GPAR3", "GPIV33", "GRND3", "GSHP3", "GUAR3", "HAGA3", "HAGA4", "HAPV3", "HBOR3", "HBRE3", "HBSA3", "HBTS5", "HETA4", "HOOT4", "HYPE3", "IFCM3", "IGBR3", "IGTI11", "IGTI3", "INEP3", "INEP4", "INTB3", "IRBR3", "ITSA3", "ITSA4", "ITUB3", "ITUB4", "JALL3", "JBSS3", "JFEN3", "JHSF3", "JOPA3", "JOPA4", "JPSA3", "JSLG3", "KEPL3", "KLBN11", "KLBN3", "KLBN4", "KRSA3", "LAND3", "LAVV3", "LEVE3", "LIGT3", "LIPR3", "LJQQ3", "LOGG3", "LOGN3", "LPSB3", "LREN3", "LUPA3", "LUXM4", "LVTC3", "LWSA3", "MAPT3", "MAPT4", "MATD3", "MBLY3", "MDIA3", "MDNE3", "MEAL3", "MELK3", "MERC4", "MGEL4", "MGLU3", "MILS3", "MLAS3", "MNDL3", "MNPR3", "MOAR3", "MOVI3", "MRFG3", "MRSA3B", "MRSA5B", "MRSA6B", "MRVE3", "MSPA3", "MSPA4", "MTRE3", "MTSA4", "MULT3", "MWET4", "MYPK3", "NEOE3", "NEXP3", "NGRD3", "NINJ3", "NORD3", "NTCO3", "NUTR3", "ODPV3", "OFSA3", "OIBR3", "OIBR4", "ONCO3", "OPCT3", "ORVR3", "OSXB3", "PATI3", "PATI4", "PCAR3", "PDGR3", "PDTC3", "PEAB3", "PEAB4", "PETR3", "PETR4", "PETZ3", "PFRM3", "PGMN3", "PINE3", "PINE4", "PLAS3", "PLPL3", "PMAM3", "PNVL3", "POMO3", "POMO4", "PORT3", "POSI3", "PRIO3", "PRNR3", "PSSA3", "PTBL3", "PTNT3", "PTNT4", "QUAL3", "RADL3", "RAIL3", "RAIZ4", "RANI3", "RAPT3", "RAPT4", "RCSL3", "RCSL4", "RDNI3", "RDOR3", "RECV3", "REDE3", "RENT3", "RNEW11", "RNEW3", "RNEW4", "ROMI3", "RPAD3", "RPAD5", "RPAD6", "RPMG3", "RRRP3", "RSID3", "RSUL4", "SANB11", "SANB3", "SANB4", "SAPR11", "SAPR3", "SAPR4", "SBFG3", "SBSP3", "SCAR3", "SEER3", "SEQL3", "SGPS3", "SHOW3", "SHUL4", "SIMH3", "SLCE3", "SMFT3", "SMTO3", "SNSY5", "SOJA3", "SOMA3", "SOND5", "SOND6", "SRNA3", "STBP3", "SUZB3", "SYNE3", "TAEE11", "TAEE3", "TAEE4", "TASA3", "TASA4", "TCSA3", "TECN3", "TEKA3", "TEKA4", "TELB3", "TELB4", "TEND3", "TFCO4", "TGMA3", "TIMS3", "TKNO4", "TOTS3", "TPIS3", "TRAD3", "TRIS3", "TRPL3", "TRPL4", "TTEN3", "TUPY3", "TXRX3", "TXRX4", "UCAS3", "UGPA3", "UNIP3", "UNIP5", "UNIP6", "USIM3", "USIM5", "USIM6", "VALE3", "VAMO3", "VBBR3", "VITT3", "VIVA3", "VIVR3", "VIVT3", "VLID3", "VSTE3", "VULC3", "VVEO3", "WEGE3", "WEST3", "WHRL3", "WHRL4", "WIZC3", "WLMM3", "WLMM4", "YDUQ3", "ZAMP3"
+            ];
+
+            var selectAcoes = document.getElementById("acaoSelecionada");
+
+            listaAcoes.forEach(function(acao) {
+              var option = document.createElement("option");
+              option.value = acao;
+              option.text = acao;
+              selectAcoes.add(option);
+            });
+          </script>
+ 
+        </select><br><br>
+        <div>
+        <input class="btn btn-warning" type="submit" value="Cadastrar na carteira" >
+        </div>
+        
+      </form>
+    </div>
+
+    <script>
+       $(document).ready(function(){
+        // Inicializando o datepicker
+        $('.datepicker').datepicker({
+          format: 'dd/mm/yyyy',  // Formato da data
+          autoclose: true        // Fechar automaticamente após a seleção
+        });
+      });
+      
+      function enviarFormulario() {
+        var preco = document.getElementById("preco").value;
+        var qtd = document.getElementById("qtd").value;
+        var data = document.getElementById("data").value;
+        var ticker = document.getElementById("acaoSelecionada").value;
+        // Manda para servidor o cadastro
+        google.script.run.createStock(ticker,preco,qtd,data);
+        google.script.host.close();
+      }
+    </script>
+  </body>
+</html>
