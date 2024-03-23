@@ -72,12 +72,38 @@ function getContent_(url) {
 
 //Extraindo pela fundamentos - nova solução usando cheerios
 function extrairConteudoTabela(html) {
-  var content = getContent_('https://gmc-eduardo.github.io/FundamentusStock/');
-
   // Carrega o HTML usando Cheerio
   var $ = Cheerio.load(html);
-  Logger.log($('tr').text());
-  var novaLinha ;
+
+  // Índices das células que queremos armazenar
+  var icell = [0, 1, 2, 3, 5, 16, 17, 18, 19, 20];
+
+  // Encontra todas as tabelas no HTML
+  $('table').each(function(i, tabela){
+    var novaLinha = [];
+
+    // Itera sobre as linhas da tabela
+    $(tabela).find('tr').each(function(j, linha){
+      var linhaArray = [];
+
+      // Itera sobre as células da linha
+      $(linha).find('td').each(function(k, celula){
+        // Verifica se o índice da célula está na lista de índices desejados
+        if (icell.includes(k)) {
+          // Adiciona o conteúdo da célula à linhaArray
+          linhaArray.push($(celula).text());
+        }
+      });
+
+      // Adiciona a linhaArray à novaLinha
+      novaLinha.push(linhaArray.join(', '));
+    });
+
+    // Adiciona a nova linha à planilha
+    if (novaLinha.length > 0) {
+      Logger.log('Tabela ' + (i+1) + ': ' + novaLinha.join(' I '));
+    }
+  });
 }
 
 
