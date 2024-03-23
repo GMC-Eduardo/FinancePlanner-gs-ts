@@ -18,7 +18,7 @@ function onEdit(e) {
   if (range.getRow() == 1 && range.getColumn() == 14 && sheet.getSheetName() == "Stocks Filter") {
     cell = sheet.getRange("N1");
     cell.setValue(false);
-    mineStock(papel);
+    mineStock();
   }
 }
 function createStock(ticker, preco, qtd, data) {
@@ -41,7 +41,7 @@ function abrirHtmlExternal() {
 }
 //'https://bvmf.bmfbovespa.com.br/sig/FormConsultaNegociacoes.asp?strTipoResumo=RES_NEGOCIACOES&strSocEmissora=CIEL&strDtReferencia=02/2024&strIdioma=P&intCodNivel=1&intCodCtrl=100'; possiveis sources de test
 
-function mineStock(papel) {
+function mineStock() {
   //abrirHtmlExternal();
   var url = 'https://gmc-eduardo.github.io/FundamentusStock/';
 
