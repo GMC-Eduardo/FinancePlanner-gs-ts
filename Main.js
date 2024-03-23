@@ -14,10 +14,10 @@ function onEdit(e) {
     //abrirCRUDInvestment();
 
   }
+  //Extract FII
   if (range.getRow() == 1 && range.getColumn() == 14 && sheet.getSheetName() == "Stocks Filter") {
     cell = sheet.getRange("N1");
     cell.setValue(false);
-    let papel = "MGLU3"
     mineStock(papel);
   }
 }
@@ -42,9 +42,9 @@ function abrirHtmlExternal() {
 //'https://bvmf.bmfbovespa.com.br/sig/FormConsultaNegociacoes.asp?strTipoResumo=RES_NEGOCIACOES&strSocEmissora=CIEL&strDtReferencia=02/2024&strIdioma=P&intCodNivel=1&intCodCtrl=100'; possiveis sources de test
 
 function mineStock(papel) {
-  abrirHtmlExternal();
-  var url = 'https://gmc-eduardo.github.io/FundamentusFII/';
-  
+  //abrirHtmlExternal();
+  var url = 'https://gmc-eduardo.github.io/FundamentusStock/';
+
   var options = {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
@@ -66,39 +66,18 @@ function mineStock(papel) {
   }
 }
 
+function getContent_(url) {
+  return UrlFetchApp.fetch(url).getContentText()
+}
+
 //Extraindo pela fundamentos - nova solução usando cheerios
 function extrairConteudoTabela(html) {
-  // Carrega a biblioteca Cheerio
-  eval(UrlFetchApp.fetch('https://gmc-eduardo.github.io/FundamentusFII/').getContentText());
+  var content = getContent_('https://gmc-eduardo.github.io/FundamentusStock/');
 
   // Carrega o HTML usando Cheerio
   var $ = Cheerio.load(html);
-  
-  // Encontra todas as tabelas no HTML
-  $('table').each(function(i, tabela){
-    
-    
-
-    // Cria uma nova planilha para cada tabela
-    var planilha = SpreadsheetApp.getActiveSpreadsheet();
-
-    // Itera sobre as linhas da tabela
-    $(tabela).find('tr').each(function(j, linha){
-      var novaLinha = [];
-
-      // Itera sobre as células da linha
-      $(linha).find('td').each(function(k, celula){
-        // Adiciona o conteúdo da célula à nova linha
-        //novaLinha.push($(celula).text());
-        // Limita a execução para 3 linhas
-        Logger.log($(celula).text());
-        if (i >= 3) return false;
-      });
-
-      // Adiciona a nova linha à planilha
-      planilha.appendRow(novaLinha);
-    });
-  });
+  Logger.log($('tr').text());
+  var novaLinha ;
 }
 
 
