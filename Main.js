@@ -18,7 +18,7 @@ function onEdit(e) {
   if (range.getRow() == 1 && range.getColumn() == 14 && sheet.getSheetName() == "Stocks Filter") {
     cell = sheet.getRange("N1");
     cell.setValue(false);
-    mineStock();
+    mineStock(sheet);
   }
 }
 function createStock(ticker, preco, qtd, data) {
@@ -41,7 +41,7 @@ function abrirHtmlExternal() {
 }
 //'https://bvmf.bmfbovespa.com.br/sig/FormConsultaNegociacoes.asp?strTipoResumo=RES_NEGOCIACOES&strSocEmissora=CIEL&strDtReferencia=02/2024&strIdioma=P&intCodNivel=1&intCodCtrl=100'; possiveis sources de test
 
-function mineStock() {
+function mineStock(sheet) {
   //abrirHtmlExternal();
   var url = 'https://gmc-eduardo.github.io/FundamentusStock/';
 
@@ -57,7 +57,7 @@ function mineStock() {
     Logger.log("HTML fetch: ");
     //Logger.log(html);
     // Extrai conteúdo das células da tabela
-    var conteudoTabela = extrairConteudoTabela(html);
+    var conteudoTabela = extrairConteudoTabela(html, sheet);
     //Logger.log('Conteúdo da Tabela: ' + JSON.stringify(conteudoTabela));
   } catch (erro) {
     // Em caso de erro, exibir uma mensagem de erro
@@ -71,7 +71,7 @@ function getContent_(url) {
 }
 
 //Extraindo pela fundamentos - nova solução usando cheerios
-function extrairConteudoTabela(html) {
+function extrairConteudoTabela(html, sheet) {
   // Carrega o HTML usando Cheerio
   var $ = Cheerio.load(html);
 
@@ -79,30 +79,34 @@ function extrairConteudoTabela(html) {
   var icell = [0, 1, 2, 3, 5, 16, 17, 18, 19, 20];
 
   // Encontra todas as tabelas no HTML
-  $('table').each(function(i, tabela){
-    var novaLinha = [];
+  $('table').each(function (t, tabela) {
+    var rowIndex = 4; // Começa na linha 4 da planilha
 
     // Itera sobre as linhas da tabela
-    $(tabela).find('tr').each(function(j, linha){
+    $(tabela).find('tr').each(function (j, linha) {
+      var colIndex = 1; // Começa na coluna A da planilha
       var linhaArray = [];
 
       // Itera sobre as células da linha
-      $(linha).find('td').each(function(k, celula){
+      $(linha).find('td').each(function (k, celula) {
         // Verifica se o índice da célula está na lista de índices desejados
         if (icell.includes(k)) {
           // Adiciona o conteúdo da célula à linhaArray
-          linhaArray.push($(celula).text());
+          linhaArray.push($(celula).text().trim()); // Use trim() para remover espaços em branco extras
         }
       });
 
-      // Adiciona a linhaArray à novaLinha
-      novaLinha.push(linhaArray.join(', '));
+      // Verifica se a linha contém dados antes de inserir na planilha
+      if (linhaArray.length > 0) {
+        // Itera sobre os valores da linhaArray e insere na planilha
+        linhaArray.forEach(function(valor) {
+          sheet.getRange(rowIndex, colIndex++).setValue(valor);
+        });
+        rowIndex++; // Move para a próxima linha da planilha
+      }
     });
 
-    // Adiciona a nova linha à planilha
-    if (novaLinha.length > 0) {
-      Logger.log('Tabela ' + (i+1) + ': ' + novaLinha.join(' I '));
-    }
+    Logger.log('Tabela ' + (t + 1) + ' inserida na planilha.');
   });
 }
 
