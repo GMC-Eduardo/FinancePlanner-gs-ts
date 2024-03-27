@@ -14,11 +14,17 @@ function onEdit(e) {
     //abrirCRUDInvestment();
 
   }
-  //Extract FII
+  //Extract Stocks
   if (range.getRow() == 1 && range.getColumn() == 14 && sheet.getSheetName() == "Stocks Filter") {
     cell = sheet.getRange("N1");
     cell.setValue(false);
     mineStock(sheet);
+  }
+  //Extract Stocks
+  if (range.getRow() == 1 && range.getColumn() == 14 && sheet.getSheetName() == "FII Filter") {
+    cell = sheet.getRange("N1");
+    cell.setValue(false);
+    mineFII(sheet);
   }
 }
 function createStock(ticker, preco, qtd, data) {
@@ -44,7 +50,7 @@ function abrirHtmlExternal() {
 function mineStock(sheet) {
   //abrirHtmlExternal();
   var url = 'https://gmc-eduardo.github.io/FundamentusStock/';
-
+  var icell = [0, 1, 2, 3, 5, 16, 17, 18, 19, 20];
   var options = {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
@@ -65,18 +71,40 @@ function mineStock(sheet) {
     SpreadsheetApp.getUi().alert('Erro na requisição: ' + erro);
   }
 }
+function mineFII(sheet) {
+  //abrirHtmlExternal();
+  var url = 'https://gmc-eduardo.github.io/FundamentusFII/';
+  
+  var icell = [0, 1, 2, 4, 5, 6];
+  var options = {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+    },
+    muteHttpExceptions: true
+  };
+  try {
+    var resposta = UrlFetchApp.fetch(url, options);
+    var html = resposta.getContentText();
+    Logger.log("HTML fetch: ");
+    //Logger.log(html);
+    // Extrai conteúdo das células da tabela
+    var conteudoTabela = extrairConteudoTabela(html, sheet,icell);
+    //Logger.log('Conteúdo da Tabela: ' + JSON.stringify(conteudoTabela));
+  } catch (erro) {
+    // Em caso de erro, exibir uma mensagem de erro
+    Logger.log('Erro na requisição: ' + erro);
+    SpreadsheetApp.getUi().alert('Erro na requisição: ' + erro);
+  }
+}
 
 function getContent_(url) {
   return UrlFetchApp.fetch(url).getContentText()
 }
 
 //Extraindo pela fundamentos - nova solução usando cheerios
-function extrairConteudoTabela(html, sheet) {
+function extrairConteudoTabela(html, sheet,icell) {
   // Carrega o HTML usando Cheerio
   var $ = Cheerio.load(html);
-
-  // Índices das células que queremos armazenar
-  var icell = [0, 1, 2, 3, 5, 16, 17, 18, 19, 20];
 
   // Encontra todas as tabelas no HTML
   $('table').each(function (t, tabela) {
@@ -92,7 +120,7 @@ function extrairConteudoTabela(html, sheet) {
         // Verifica se o índice da célula está na lista de índices desejados
         if (icell.includes(k)) {
           // Adiciona o conteúdo da célula à linhaArray
-          linhaArray.push($(celula).text().trim()); // Use trim() para remover espaços em branco extras
+          linhaArray.push($(celula).text().trim()); // Usando trim() para remover espaços em branco extras
         }
       });
 
